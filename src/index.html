@@ -11,22 +11,52 @@
     <title>Wheather Forcasting</title>
 
     <!-- Icon:Website title icon -->
+    <link rel="shortcut icon" href="../images/logo1.png" type="image/png" />
 
     <!-- Css:Attaching the output css using tailwind for that -->
     <link rel="stylesheet" href="./output.css" />
   </head>
   <!-- =======================================================================================BODY=============================================================== -->
-  <body class="w-[100dvw] h-[100dvh] flex flex-col bg-blue-500">
-    <div >
-
-    </div>
+  <body class="w-[100dvw] h-[100dvh] flex flex-col overflow-x-hidden">
     <!-- ====================================================================Header=============================================================== -->
-    <header></header>
+    <header class="w-full h-[8dvh] text-center p-4 font-medium text-xl">
+      <nav>
+        <h2>Weather Report Dashboard</h2>
+      </nav>
+    </header>
     <!--=====================================================================Main =================================================================-->
-    <main></main>
+    <main
+      class="flex flex-col md:flex-row gap-1 justify-center items-center w-full h-full md:h-[calc(100dvh-16dvh)] bg-blue-100"
+    >
+      <div class="h-full md:min-w-[35%] min-w-full py-3 px-6 flex flex-col gap-4">
+        <form class="flex w-full h-fit  py-5 flex-col gap-6">
+          <div class="flex w-full h-fit flex-col gap-2">
+            <label for="city_name" class="font-semibold text-sm"
+              >Enter a City Name</label
+            >
+            <input
+              type="text"
+              id="city_name"
+              placeholder="Eg: Mumbai, Delhi or Hyderabad"
+              class="py-2 px-2 rounded-sm text-sm drop-shadow-sm focus:ring-blue-400 ring-2 ring-transparent outline-none"
+            />
+          </div>
+          <input
+            type="submit"
+            value="Search"
+            class="bg-violet-500 text-white p-2 rounded-sm drop-shadow text-sm hover:bg-white hover:border-violet-500 hover:text-violet-500 hover:border-2 font-medium active:drop-shadow-none "
+          />
+        </form>
+        <p class="text-center">Or</p>
+        <button class="w-full h-fit p-2 text-sm bg-slate-600 text-white drop-shadow rounded-sm font-medium hover:bg-slate-500 active:drop-shadow-none active:bg-slate-700">Use Location</button>
+      </div>
+      <div class="h-full md:min-w-[65%] min-w-full"></div>
+    </main>
     <!-- ====================================================================Footer ===============================================================-->
-    <footer></footer>
-  </body>                         
-</html>         
+    <footer class="text-center text-xs w-full h-[8dvh] bg-black text-slate-300">
+      <p class="p-3">copyright @2024 Weather Forcasting</p>
+    </footer>
+  </body>
+</html>
 
-<!-- END OF FILE -->          
+<!-- END OF FILE -->
