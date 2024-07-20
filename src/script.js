@@ -57,14 +57,26 @@ function Error(isError,message)
   //condition :False Then it will hide that message
   else
   {
-    document.querySelector("#error").style.display="flex";
+    document.querySelector("#error").style.display="none";
     document.querySelector("#error").innerHTML="";
   }
 }
 
-//Function :TO set the input of form the city clicked from recent cities list
-function SetCity(city) {
-  document.querySelector("#city_name").value = city;
+
+//Function to fetch the data
+function GetWeatherData(cityname)
+{
+  Loading(true);
+  fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${cityname}?unitGroup=metric&key=XZFNNWD26NQVG7TGQ7G9WQTGD&contentType=json`)
+  .then((response) => response.json())
+  .then((response)=>{
+    Loading(false);
+    RenderWeatherData(response);
+  },(err)=>{
+    Loading(false);
+    Error(true,err.message);
+  })
+  .catch((err)=>console.log(err));
 }
 
 //Function: For displaying the search city data
@@ -78,12 +90,15 @@ function RenderRecentCities() {
   else {
     document.querySelector("#recent-search-btn").style.display = "flex";
     Recent_City_div.innerHTML = "";
-    cities.map((city) => {
+    const city=[...new Set(cities.map((item)=>item))];
+    city.map((city) => {
       Recent_City_div.innerHTML += `<div class="w-full min-h-fit shadow py-3 px-4 font-medium ">
-            <button class="w-full min-h-fit px-4 hover:bg-slate-600 hover:text-white" onclick="SetCity('${city}')">${city}</button></div>`;
+            <button class="w-full min-h-fit px-4 hover:bg-slate-600 hover:text-white" onclick="GetWeatherData('${city}')">${city}</button></div>`;
     });
   }
 }
+
+
 
 
 
@@ -100,17 +115,7 @@ SearchForm.addEventListener("submit", (event) => {
   if (Text_pattern.test(cityname)) {
     cities.unshift(cityname);
     localStorage.setItem("cities", JSON.stringify(cities));
-    Loading(true);
-    fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${cityname}?unitGroup=metric&key=XZFNNWD26NQVG7TGQ7G9WQTGD&contentType=json`)
-    .then((response) => response.json())
-    .then((response)=>{
-      Loading(false);
-      RenderWeatherData(response);
-    },(err)=>{
-      Loading(false);
-      Error(true,err.message);
-    })
-    .catch((err)=>console.log(err));
+    GetWeatherData(cityname);
     RenderRecentCities();
     
   } 
