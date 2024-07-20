@@ -345,7 +345,7 @@ function GetLocation()
       RenderWeatherData(response);
     },(err)=>{
       Loading(false);
-      Error(true,err.message);
+      Error(true,err.statusCode);
     })
     .catch((err)=>console.log(err));
     }
