@@ -17,16 +17,16 @@
     <link rel="stylesheet" href="./output.css" />
   </head>
   <!-- =======================================================================================BODY=============================================================== -->
-  <body class="w-[100dvw] h-[100dvh] flex flex-col overflow-x-hidden">
+  <body class="w-[100dvw] h-full md:h-[100dvh] flex flex-col overflow-x-hidden justify-between">
     <!-- ====================================================================Header=============================================================== -->
-    <header class="w-full h-[8dvh] text-center p-4 font-medium text-xl">
+    <header class="w-full h-[8dvh] text-center p-4 font-medium text-xl bg-slate-200">
       <nav>
         <h2>Weather Report Dashboard</h2>
       </nav>
     </header>
     <!--=====================================================================Main =================================================================-->
     <main
-      class="flex flex-col md:flex-row gap-1 justify-center items-center w-full h-full md:h-[calc(100dvh-16dvh)] bg-blue-100"
+      class="flex flex-col-reverse md:flex-row gap-1 justify-center items-center w-full h-full md:h-[calc(100dvh-16dvh)]"
     >
       <div
         class="h-full md:min-w-[35%] min-w-full py-3 px-6 flex flex-col gap-4"
@@ -42,25 +42,26 @@
               name="city_name"
               placeholder="Eg: Mumbai, Delhi or Hyderabad"
               required
-              class="py-2 px-2 rounded-sm text-sm drop-shadow-sm focus:ring-blue-400 ring-2 ring-transparent outline-none text-capitalize"
+              class="py-2 px-2 rounded-sm text-sm drop-shadow-sm focus:ring-blue-400 shadow-xl ring-2 ring-transparent outline-none text-capitalize bg-blue-50"
             />
           </div>
           <input
             type="submit"
             value="Search"
-            class="bg-violet-500 text-white p-2 rounded-sm drop-shadow text-sm hover:bg-white hover:border-violet-500 hover:text-violet-500 hover:border-2 font-medium active:drop-shadow-none"
+            class=" text-white p-2 rounded-sm drop-shadow text-sm bg-indigo-500 active:bg-blue-600 active:text-white hover:text-indigo-500 hover:bg-white border-indigo-500 hover:border-2 font-medium active:drop-shadow-none"
           />
         </form>
         <p class="text-center">Or</p>
         <button
-          class="w-full h-fit p-2 text-sm bg-slate-600 text-white drop-shadow rounded-sm font-medium hover:bg-slate-500 active:drop-shadow-none active:bg-slate-700"
+          class="w-full h-fit p-2 text-sm bg-sky-500 text-white drop-shadow rounded-sm font-medium hover:text-sky-500 hover:bg-white border-sky-500 hover:border-2 active:drop-shadow-none active:bg-slate-700"
           id="location_btn"
+          onclick="GetLocation()"
         >
           Use Location
         </button>
         <div class="w-full">
           <button
-            class="bg-gray-600 w-full text-white text-sm font-medium p-2 rounded-sm drop-shadow flex justify-between hover:bg-slate-060 active:bg-zinc-700"
+            class="bg-cyan-500 w-full text-white text-sm font-medium p-2 rounded-sm drop-shadow justify-between hidden hover:bg-slate-060 active:bg-zinc-700"
             id="recent-search-btn"
           >
             <p>Recently Searched</p>
@@ -72,21 +73,27 @@
               class="w-full h-[95%] bg-white rounded shadow overflow-y-auto flex flex-col"
               id="recent-searches"
             >
-              <div
-                class="flex justify-center items-center w-full h-full"
-                id="no-recent-search-data"
-              >
-                <h2 class="text-xl text-slate-400">No Recent Search</h2>
-              </div>
             </div>
-            <button class="bg-zinc-600 text-white w-full p-2 hover:bg-zinc-700 active:bg-slate-700 text-sm font-medium" id="clear-recent-search">Clear Recent Search</button>
+            <button class="bg-orange-600 text-white w-full p-2 hover:bg-zinc-700 active:bg-slate-700 text-sm font-medium" id="clear-recent-search">Clear Recent Search</button>
           </div>
         </div>
       </div>
-      <div class="h-full md:min-w-[65%] min-w-full"></div>
+      <div class="h-full  md:min-w-[65%] min-w-[98dvw] p-2 justify-center items-center flex flex-col gap-2">
+        <div id="loading" class="w-[100%] h-[90dvh] hidden justify-center items-center">
+         <p>Loading ...</p>
+        </div>
+        <div id="error" class="w-[100%] h-[90dvh] hidden justify-center items-center"></div>
+        <div id="present-day-weather-info" class="w-[96dvw] md:w-[96%] font-medium  rounded md:shadow-2xl flex flex-col gap-1 p-1">
+        </div>
+        <div  class="w-[96%] h-[100%] p-2 flex flex-col gap-2 md:shadow-md rounded" id="extra-days-forecast-container">
+          <h1 class="text-xl font-medium" id="extra-days-forecast"></h1>
+          <div id="extended-days-weather-info-container" class="w-[320px] sm:w-[100%] h-[100%] p-2 overflow-x-auto flex gap-2">
+          </div>
+        </div>
+      </div>
     </main>
     <!-- ====================================================================Footer ===============================================================-->
-    <footer class="text-center text-xs w-full h-[8dvh] bg-black text-slate-300">
+    <footer class="text-center text-xs w-full h-[6dvh] bg-black text-slate-300">
       <p class="p-3">copyright @2024 Weather Forcasting</p>
     </footer>
 
