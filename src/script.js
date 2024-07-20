@@ -53,11 +53,11 @@ function Error(isError,code)
   {
     document.querySelector("#error").style.display="flex";
 
-    if(code ===404)
+    if(code ==="404")
     {
       document.querySelector("#error").innerHTML=`<h3>City Not Found ${code}</h3>`;
     }
-    else if(code ===400)
+    else if(code ==="400")
     {
       document.querySelector("#error").innerHTML=`<h3>Bad Request Please Try again ${code}</h3>`;
     }
@@ -124,7 +124,7 @@ SearchForm.addEventListener("submit", (event) => {
   //then fetching the data from the Api
   //then rendering it to the dom
   const cityname = event.target.city_name.value;
-  if (Text_pattern.test(cityname)) {
+  if (Text_pattern.test(cityname) && cityname.length>2) {
     cities.unshift(cityname);
     localStorage.setItem("cities", JSON.stringify(cities));
     GetWeatherData(cityname);
