@@ -46,13 +46,25 @@ function Loading(isLoading)
 
 
 //function :Erorr Message will be shown if the User type any thing wrong 
-function Error(isError,message)
+function Error(isError,code)
 {
   //condtion :True then it will show the error message
   if(isError)
   {
     document.querySelector("#error").style.display="flex";
-    document.querySelector("#error").innerHTML=`<h3>${message}</h3>`;
+
+    if(code ===404)
+    {
+      document.querySelector("#error").innerHTML=`<h3>City Not Found ${code}</h3>`;
+    }
+    else if(code ===400)
+    {
+      document.querySelector("#error").innerHTML=`<h3>Bad Request Please Try again ${code}</h3>`;
+    }
+    else
+    {
+      document.querySelector("#error").innerHTML="Something Went Wrong"
+    }
   }
   //condition :False Then it will hide that message
   else
@@ -70,11 +82,10 @@ function GetWeatherData(cityname)
   fetch(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${cityname}?unitGroup=metric&key=XZFNNWD26NQVG7TGQ7G9WQTGD&contentType=json`)
   .then((response) => response.json())
   .then((response)=>{
-    Loading(false);
     RenderWeatherData(response);
   },(err)=>{
     Loading(false);
-    Error(true,err.message);
+    Error(true,err.statusCode);
   })
   .catch((err)=>console.log(err));
 }
@@ -90,6 +101,7 @@ function RenderRecentCities() {
   else {
     document.querySelector("#recent-search-btn").style.display = "flex";
     Recent_City_div.innerHTML = "";
+    //this will only render the unique ones;
     const city=[...new Set(cities.map((item)=>item))];
     city.map((city) => {
       Recent_City_div.innerHTML += `<div class="w-full min-h-fit shadow py-3 px-4 font-medium ">
@@ -166,7 +178,10 @@ function RenderExtendedWeatherData(data) {
     extended_weather_info_container.innerHTML += `<div class="flex text-center flex-col gap-1 p-2 rounded shadow" style="min-width:160px;background:rgb(226, 230, 234)" key=${item.datetime}>
     <h1 class="font-medium">${item?.datetime}</h1>
     <h2 class="font-medium" style="font-size:26px"> ${item?.temp}&#176;C</h2>
-    <p class="font-medium">${item?.conditions}</p>
+    <div class="flex gap-1 justify-center items-center">
+        <img src=${`../images/${item?.icon}.png`} width="30" height="30" alt=${item?.icon}/>
+        <p class="font-medium">${item?.conditions}</p>
+    </div>
     <ul class="flex flex-col w-[100%] font-medium" style="font-size:13px">
       <li class="flex justify-between p-1 w-[100%]">
          <p>Feelslike:</p>
@@ -191,6 +206,8 @@ function RenderWeatherData(data) {
     "#present-day-weather-info"
   );
 
+  //calling the function that will set the loading to false when the data will be loading
+  Loading(false);
 
   present_weather_info_container.innerHTML = `
   <div class="w-[100%] flex flex-col justify-between h-[100%] " style="background:rgba(255,255,255,0.1)">
@@ -201,12 +218,14 @@ function RenderWeatherData(data) {
          </div>
          <div>
             <h1 style="font-size:18px;" >${data?.address}</h1>
+            <h1>${data?.timezone}</h1>
             <div class="flex gap-2 w-[100%] text-sm">
               <p>${dateformat.format(date)}</p>
             </div>
           </div>
       </div>
-       <div>
+       <div class="flex flex-col justify-center items-center">
+        <img src=${`../images/${data.days[0].icon}.png`} width="80" height="50" alt=${data.days[0].icon}/>
          <p style="font-size:18px">${data?.days[0]?.conditions}</p>
        </div>
     </div>
