@@ -1,11 +1,4 @@
-//https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/shahdol?unitGroup=metric&include=days%2Ccurrent&key=XZFNNWD26NQVG7TGQ7G9WQTGD&contentType=json
-//Using Open Weather Api
-// q is to search city
-//appid is private key for the use it is inbuilt
-//units metric to show data is celcius degrees
-
-//Api Key
-const API_KEY = "1a6d3c613d33e8dd6db82e6a3f2be60c";
+//Using Visual crossing web srvice for weather info
 
 //Fetching thr form bt id selector
 const SearchForm = document.querySelector("#Search_form");
@@ -22,7 +15,9 @@ var cities = localStorage.getItem("cities")
   : [];
 
 //Adding Event Listener to clear search history btn
+//clearing the recent search history data;
 Clear_Recent_Search_btn.addEventListener("click", function () {
+  Recent_search_div_active =false;
   cities = [];
   localStorage.clear();
   RenderRecentCities();
@@ -31,8 +26,10 @@ Clear_Recent_Search_btn.addEventListener("click", function () {
 });
 
 
+//Function: For Showing the loading icon while the user is searching for the city info
 function Loading(isLoading)
 {
+  //Condition: True then it will show loading and if error message is show it will hide that message;
   if(isLoading)
   {
     Error(false,"");
@@ -40,19 +37,24 @@ function Loading(isLoading)
     document.querySelector("#present-day-weather-info").innerHTML="";
     document.querySelector("#loading").style.display = "flex";
   }
+  //conditon :False then it will hide the loading div
   else
   {
     document.querySelector("#loading").style.display = "none";
   }
 }
 
+
+//function :Erorr Message will be shown if the User type any thing wrong 
 function Error(isError,message)
 {
+  //condtion :True then it will show the error message
   if(isError)
   {
     document.querySelector("#error").style.display="flex";
     document.querySelector("#error").innerHTML=`<h3>${message}</h3>`;
   }
+  //condition :False Then it will hide that message
   else
   {
     document.querySelector("#error").style.display="flex";
@@ -68,9 +70,12 @@ function SetCity(city) {
 //Function: For displaying the search city data
 function RenderRecentCities() {
   let Recent_City_div = document.querySelector("#recent-searches");
+  //if no recent search data then it will hide 
   if (cities.length == 0) {
     document.querySelector("#recent-search-btn").style.display = "none";
-  } else {
+  } 
+  //else it will show the recent search button
+  else {
     document.querySelector("#recent-search-btn").style.display = "flex";
     Recent_City_div.innerHTML = "";
     cities.map((city) => {
@@ -87,6 +92,10 @@ SearchForm.addEventListener("submit", (event) => {
   //to stop the event from refreshing the page
   event.preventDefault();
 
+  //Validating the city name will it a valid text then it will 
+  //then showing loading indicator
+  //then fetching the data from the Api
+  //then rendering it to the dom
   const cityname = event.target.city_name.value;
   if (Text_pattern.test(cityname)) {
     cities.unshift(cityname);
@@ -104,14 +113,18 @@ SearchForm.addEventListener("submit", (event) => {
     .catch((err)=>console.log(err));
     RenderRecentCities();
     
-  } else {
-    console.log("Write good city name");
+  } 
+  //conditon false it will show message
+  else {
+    alert("Write a valid city name");
   }
 });
 
+//showing the caret up and down boolean
 var Recent_search_div_active = false;
 const Recent_search_btn = document.getElementById("recent-search-btn");
 
+//if it will be true then it show the data else will hide the data;
 Recent_search_btn.addEventListener("click", () => {
   if (Recent_search_div_active) {
     document.querySelector("#recent-searches-div").style.display = "none";
@@ -126,20 +139,24 @@ Recent_search_btn.addEventListener("click", () => {
   }
 });
 
+//rendering the recent search data;
 RenderRecentCities();
 
+//getting the recent date 
 const date = new Date();
+//creating and format ti show the present data and day
 const dateformat = new Intl.DateTimeFormat("en-In", {
   dateStyle: "full",
 });
 
-
+//function:Rendering the 14 days extra forecast data
 function RenderExtendedWeatherData(data) {
   var extended_weather_info_container = document.querySelector(
     "#extended-days-weather-info-container"
   );
 
 
+  //splice the first data becasue it is the present day
   data.splice(1, data.length).map((item) => {
     extended_weather_info_container.innerHTML += `<div class="flex text-center flex-col gap-1 p-2 rounded shadow" style="min-width:160px;background:rgb(226, 230, 234)" key=${item.datetime}>
     <h1 class="font-medium">${item?.datetime}</h1>
@@ -163,10 +180,12 @@ function RenderExtendedWeatherData(data) {
   });
 }
 
+//rendering the data of present day
 function RenderWeatherData(data) {
   const present_weather_info_container = document.querySelector(
     "#present-day-weather-info"
   );
+
 
   present_weather_info_container.innerHTML = `
   <div class="w-[100%] flex flex-col justify-between h-[100%] " style="background:rgba(255,255,255,0.1)">
@@ -279,6 +298,7 @@ function RenderWeatherData(data) {
   </div>`;
 
   
+  //calling the function to render the extra days forecast info;
   const extra_days_forecast=document.querySelector("#extra-days-forecast");
   extra_days_forecast.innerHTML = `${data.days.length-1} Days of Forecast`;
   RenderExtendedWeatherData(data.days);
@@ -287,6 +307,7 @@ function RenderWeatherData(data) {
 
 
 //Geting the user coordinates
+//function: to get the wearther info by using th user loaction;
 function GetLocation()
 {
   navigator.geolocation.getCurrentPosition((position)=>{
@@ -307,6 +328,7 @@ function GetLocation()
   });
 }
 
+//calling the function initially to get the weather data;
 GetLocation();
 
 
